@@ -1,0 +1,217 @@
+= Programación I: Trabajo Práctico 1
+Diego_Marcelo Ledesma  <diegoml28@gmail.com>; Cinthia_Yudith Robledo <yudi_102@hotmail.com>; Leonela_Denisse Fredes <leonelafredes@gmail.com>
+v1, {docdate}. Docentes Verónica Moyano y Hernán Rondelli (COM-01)
+:title-page:
+:numbered:
+:source-highlighter: highlight.js
+:tabsize: 4
+
+
+== Introducción
+
+La finalidad de este trabajo práctico es volcar todo lo aprendido durante la cursada en el desarrollo de un videojuego. Este consiste en que un conejo debe cruzar la calle sin ser atropellado por ningún vehículo, si esto sucede el juego se da por perdido.
+
+El presente informe se encuentra dividido en cuatro secciones. La primera corresponde a esta introducción. En la segunda (Descripción general), se explica tanto la implementación general de cada clase como los métodos desarrollados. En la tercera sección(Implementación) se encuentra el código del juego. Por último, en la cuarta sección (Conclusiones) se vuelcan las reflexiones finales acerca del trabajo realizado.
+
+
+== Descripción general
+
+//En esta sección pueden incluirse las dificultades que tuvieron, las soluciones encontradas, las decisiones que se fueron tomando a lo largo del trabajo práctico, y las cuestiones de diseño que consideren importantes.También, se puede incluir una descripción general del programa—cómo funciona.
+
+//Revisar antes de entrega final
+
+
+==== .Clase Conejo: Esta clase presenta las variables de instancia y métodos asociados al objeto `conejo`. Las variables de instancia y constructor son:
+
+  * `double x:` Refiere a la coordenada x donde estará centrado el conejo.
+  * `double y:` Refiere a la coordenada y donde estará centrado el conejo.
+  * `double tamanio:` Se usa como representación del alto y ancho de la imagen que representará al conejo, `tamanio` es proporcional al ancho, y tamanio*2 es proporcional al alto.
+  * `double distanciaDeSalto:` Es la distancia que recorrerá el conejo al avanzar hacia adelante o a los costados.
+  * `double factorDeDesplazamiento:` La velocidad a la cual el conejo se desplaza hacia abajo para dar la ilusión de movimiento de la pantalla.
+  * `Image imagen:` Es la imagen que representa al conejo.
+  * `public Conejo(double x, double y, double factorDeDesplazamiento):` Es el constructor de la clase `Conejo`. Los valores que no se pasan por el constructor se agregan de forma fija.
+
+//Revisar antes de entrega final
+
+.Los métodos desarrollados para la clase `Conejo` fueron los siguientes:
+
+  * `public void dibujar(Entorno entorno):` El método dibuja al conejo en el entorno.
+  * `public void esperar():` El método da la ilusión de movimiento de pantalla.
+  * `public void reposicionar(Entorno entorno):` El método le indica al `conejo` donde debe quedarse ubicado cuando se pierde el juego.
+  * `public void saltarIzquierda():` Permite que `conejo` avance hacia la izquierda siempre que no vaya a chocar con el borde izquierdo del entorno.
+  * `public void saltarDerecha(Entorno entorno):` Permite que el `conejo` avance hacia la derecha siempre que no vaya a chocar con el borde derecho del entorno.
+  * `public void saltarAdelante()` Permite que el `conejo` avance hacia adelante siempre que no vaya a chocar con el borde superior del entorno.
+  * `public Kamehameha atacar():` Crea un nuevo objeto `kamehameha` tomando las coordenadas `x`e`y` del `conejo`.
+  
+  * `public boolean chocasteAbajo(Entorno entorno):` Devuelve un boolean si el `conejo` choca contra el borde inferior de la pantalla.
+  * `public boolean chocasteArriba():` Devuelve un boolean si el `conejo` choca contra el borde superior de la pantalla.
+  * `public boolean chocasteIzquierda()`: Devuelve un boolean si el conejo choca contra el borde izquierdo de la pantalla.
+  * `public boolean chocasteDerecha(Entorno entorno):` Devuelve un boolean si el conejo choca contra el borde derecho de la pantalla.
+  * `public boolean chocasteAuto(Auto [] autos):` recibe como parámetro un array de autos y devuelve un `true` si el conejo choca contra algún auto, de lo contrario devuelve `false`.
+  * `public boolean chocasteTren(Tren tren):` recibe un objeto `Tren` y devuelve un boolean si el conejo lo choca.
+
+El mayor problema encontrado a la hora de hacer la clase `Conejo` fue con las colisiones.
+
+En un principio, se planteó hacer las colisiones usando un método perteneciente a la clase `Rectangle` que detecta si hay intersección entre 2 rectángulos y devuelve un boolean, para ello había que hacer dos rectángulos que contuvieran al conejo y al auto o tren. No se siguió con este modo debido a que las colisiones no se detectaban de forma correcta.
+
+Se solucionó viendo las posibles formas en las que el `conejo` podía chocar con el `auto`. Se consideró que la "cabeza" del conejo podía chocar contra la mitad inferior del auto, y la parte superior del auto podía hacerlo con la parte trasera del conejo. Algo similar se pensó para los choques en los costados del conejo. 
+
+
+=== Clase Auto: Esta clase presenta las variables de instancia y métodos asociados al objeto auto. Las variables de instancia y constructor son:
+
+  * `double x:` Refiere a la coordenada `x` del entorno donde se centra el objeto `auto`.
+  * `double y:` Refiere a la coordenada `y` del entorno donde se centra el objeto `auto`.
+  * `double alto:` Hace referencia al alto de la imagen que representa al objeto `auto`.
+  * `double ancho:` Hace referencia al ancho de la imagen que representa al objeto `auto`.
+  * `double velocidad:` Velocidad de movimiento del objeto `auto`.
+  * `double factorDeDesplazamiento:` La velocidad a la cual el objeto `auto` se desplazará hacia abajo para dar la ilusión de movimiento de la pantalla.
+  * `Image imagen:` Hace referencia a la imagen que representará a cada objeto `auto`.
+  * `public Auto(double ancho, double alto, double x, double y, double velocidad, double factorDeDesplazamiento):` Es el construcctor de la clase objeto `Auto`.
+  
+.Los métodos desarrollados para la Clase Auto fueron los siguientes:
+
+
+
+  * `public void dibujar(Entorno entorno):` Dibuja un auto en pantalla.
+  * `public void avanzar():` Mueve el `auto` en las calles dentro del eje horizontal.
+  * `public boolean chocasteConEntorno(Entorno entorno):` Retorna un boolean si el auto chocó con los costados del `entorno`.
+  * `public void volveDelOtroLado(Entorno entorno):` Cuando el auto se va por el costado de la pantalla, vuelve a aparecer del otro lado.
+  * `public void siTeFuisteConLaCalle(Entorno entorno):` Cuando el auto desaparece por la parte baja de la pantalla, vuelve a aparecer por arriba.
+  * `public double getAncho():` Retorna el ancho del objeto `auto`.
+  * `public double getAlto():` Retorna el alto del `auto`.
+  * `public double getX():` Retorna la coordenada `x` del `auto`.
+  * `public double getY():` Retorna la coordenada `y` del `auto`.
+
+
+Una de las dificultades que encontramos al realizar la clase `Auto`, fue poder realizar el desplazamiento en pantalla. 
+
+En principio lo pensamos como un movimiento diagonal en pantalla, pero de esta manera recargábamos el método de desplazamiento, ya que el mismo contenía tanto el movimiento horizontal en pantalla como el vertical. Luego de que el profesor nos explicara que un método debe hacer una sola cosa, decidimos realizar dos métodos por separado, uno para el desplazamiento horizontal y otro para el vertical. 
+
+=== Clase Tren: Esta clase presenta las variables de instancia y métodos asociados al objeto `tren`. Las variables de instancia y constructor son:
+  * `double x:` Indica la coordenada x donde está centrado el `tren`.
+  * `double y:` Indica la coordenada y donde está centrado el `tren`.
+  * `double ancho:` Indica el ancho de la imagen que representa al objeto `tren`.
+  * `double alto:` Indica el alto de la imagen que representa al `tren`.
+  * `double factorDeDesplazamiento:` Es la velocidad  a la cual el `tren` se desplazará hacia abajo para dar la ilusión de movimiento de pantalla.
+  * `Image imagen:` Es la imagen que representa al `tren`.
+  * `public Tren(double ancho, double alto, double x, double y, double velocidad, double factorDeDesplazamiento):` Es el constructor de la clase.
+
+.Los métodos desarrollados para la Clase `Tren` fueron los siguientes:
+  * `public void dibujarTren(Entorno entorno):` Muestra al `tren` en la pantalla.
+  * `public void avanzar():` Hace que el tren avance horizontalmente.
+  * `public void acelerar():`
+  * `public boolean chocasteConEntorno(Entorno entorno):` Detecta si el `tren` chocó con el entorno a la izquierda o derecha.
+  * `public void volverDelOtroLado(Entorno entorno):` Si `chocasteConEntorno` es `true`, reposiciona al tren del otro lado de la pantalla.
+  * `public boolean siTeFuisteConLaCalle(Entorno entorno):`  si el `tren` desaparece por la parte baja de la pantalla, lo reposiciona para que vuelva a aparecer por arriba.
+  * `public void desplazarEnPantalla(Entorno entorno):` Método que hace que el `tren` se desplace a través del eje vertical para dar ilusión de movimiento en pantalla.
+  * `public double getX():` Retorna el valor de `x`.
+  * `public double getY():` Retorna el valor de `y`.
+  * `public double getAlto():` Retorna el valor del `alto`.
+  * `public double getAncho():` Retorna el valor del `ancho`.
+
+La clase `Tren` no llevó mayor desafío que encontrar la correcta posición al inicio del juego y los reposicionamientos luego de salir de la pantalla para evitar los desfazajes con las calles. Esto se debió a que ya contábamos con la experiencia de la clase auto, que tiene varios comportamientos similares.
+
+=== Clase Calle: Esta clase presenta las variables de instancia y métodos asociados al objeto `calle`. Las variables de instancia y constructor son:
+
+  * `double x:` Coordenada x del centro de `calle`.
+  * `double y:` Coordenada y del centro de `calle`.
+  * `int alto:` Alto de `calle`.
+  * `double factorDeDesplazamiento:` Indica la velocidad con que  `calle` se desplaza hacia abajo en la pantalla.
+  * `Image imagen:` Imagen que representa a una calle.
+  * `public Calle (int alto, double x, double y, double factorDeDesplazamiento):` Es el constructor de la clase `Calle`.
+
+.Los métodos desarrollados para la Clase `Calle` fueron los siguientes:
+
+  * `public void dibujar(Entorno entorno):` Dibuja el objeto `calle` en el entorno.
+  * `public void desplazarEnPantalla(Entorno entorno):` Movimiento de la calle para dar la ilusión de avance de pantalla.
+  * `public boolean salisteDePantalla(Entorno entorno):` Devuelve un boolean si la calle deja el entorno.
+  * `public double alturaDelCentroDeLaCalle():` Retorna el `y` de  la calle.
+
+Entre los desafíos que presentó la creación de esta clase, mencionamos el reposicionamiento en patalla cuando la calle desaparecía por debajo. 
+
+Fue relativamente fácil reposicionar una sola calle, pero el desafío aumentó cuando tuvimos que hacer lo mismo con la segunda. Las imágenes o bien se solapaban al reentrar en pantalla, o hacían una entrada muy brusca en el tope de la misma. Esto lo solucionamos volviendo las calles muy por "arriba" de la coordenada `y=0` del `entorno`, para que: por un lado, la entrada se viera suave y por el otro que no hubiese solapamiento de las imágenes, de esta manera obtuvimos la ilusión de una pantalla sin fin.  
+
+=== Clase Kamehameha: Esta clase presenta las variables de instancia y métodos asociados al objeto Kamehameha. Las variables de instancia y constructor son::
+
+  * `double x:` coordenada correspondiente al ancho de pantalla en donde se centra el `kamehameha`.
+  * `double y:` coordenada correspondiente a la altura de pantalla en donde se centra el `kamehameha`.
+  * `double tamanio:` Diametro del `kamehameha` .
+  * `double velocidadDelKamehameha:` Velocidad a la que se moverá el `kamehameha`.
+  * `Image imagen:` Imagen que representa un kamehameha.
+  * `public Kamehameha(double x, double y, velocidaDelKamehameha):` Es el constructor de la clase `Kamehameha`.
+
+.Los métodos desarrollados para la clase `Kamehameha` fueron los siguientes:
+
+ * `public void dibujar(Entorno entorno): Dibuja al `kamehameha` en pantalla.
+ * `public void moverseHaciaAdelante():` Movimiento del objeto `kamehameha` hacia adelante.
+ * `public chocasteEntorno():` Devuelve un boolean que indica si el `kamehameha` llega a la parte superior del entorno.
+ * `public boolean chocasteAuto(Auto auto):` Devuelve un boolean si el `kamehameha` choco a un `auto.
+ * `public boolean chocasteTren (Tren tren):` Devuelve un boolean si el `kamehameha` choca al `tren`.
+
+Las complicaciones que mencionaremos sobre esta clase son: primero, como programar las colisiones y segundo, como `lanzarKamehameha`. 
+
+Para el primer desafío, nos basamos en la experiencia conseguida al crear colisiones en la Clase `Conejo`. Para el segundo, primero se lo realizó dentro del juego, sin crear un método para ello, y luego se decidió que debía ser el conejo quien tuviera la habilidad, ya que toma como referencia para crear un nuevo `kamehameha` los valores de `x` e `y` del `conejo`.
+
+=== Clase Juego: En esta clase se presentan las variables de instancia y métodos asociados al objeto Juego. Las mismas son:
+ * `Entorno entorno`: El entorno donde se desarrollará el juego.
+ * `Conejo conejo`: El objeto que manejará el jugador.
+ * `Kamehame kame`: El ataque que puede realizar el `Conejo`
+ * `Auto[] autos`: Los obstáculos del tipo `Auto` que el jugador deberá esquivar.
+ * `Calle avenidaLosConejos`: Calle por la cual circularán los vehículos.
+ * `Calle boulevardConejoSaltarin`: Calle por la cual circularán los vehículos
+ * `Tren tren`: Obstáculo del tipo `tren` que deberá esquivar el jugador.
+ * `Clip fondo`: Sonido ambiental del juego
+ * `int puntos`: Puntos que gana el jugador al destruir vehículos.
+ * `int saltos`: Cantidad de saltos hacia adelante que realiza el  `conejo`.
+ * `boolean gameOver`: Mientras se esté jugando devolverá `false`, cuando se pierda el juego, devolverá `true`.
+ * `public Juego()`: Se inicializan todas las variables de instancia de la Clase.
+ * `public void tick()`: En este método se desarrolla toda la lógica del juego, cuando y donde dibujar los objetos de cada clase, cuando actualizar las variables `puntos` y `saltos`, que acciones realizar al oprimir teclas y cuales son las condiciones para que el `gameOver` arroje `true`.
+ * `private void inicializarAutosEnPantalla()`: Define en que lugar de la pantalla se van a crear los autos del array de autos.
+ * `public static void main(String[] args)`: Se crea un nuevo objeto del tipo `Juego`. 
+
+== Implementación
+
+
+.Clase Conejo
+[source, java]
+----
+include::src/juego/Conejo.java[]
+----
+
+.Clase Auto
+[source, java]
+----
+include::src/juego/Auto.java[]
+----
+
+_Clase Tren_
+[source, java]
+----
+include::src/juego/Tren.java[]
+----
+
+_Clase Calle_
+[source, java]
+----
+include::src/juego/Calle.java[]
+----
+_Clase Kamehameha_
+[source, java]
+----
+include::src/juego/Kamehameha.java[]
+----
+
+_Clase Juego_
+[source, java]
+----
+include::src/juego/Juego.java[]
+----
+== Conclusiones
+
+Luego de haber desarrollado el código para cumplir con el trabajo práctico solicitado, podemos notar que fue posible realizarlo solo utilizando lo aprendido en clase y la guía de nuestro profesor, sin necesidad de recurrir a fuentes externas.
+
+Es extremadamente importante y valoramos mucho el hecho de tener la oportunidad de haber realizado un programa que requiera el entendimiento de como conjugar los distintos temas aprendidos. Ya que existe una gran diferencia entre realizar las prácticas de cada tema por separado, por un lado, y  la realización de este trabajo por el otro. Las prácticas, si bien son necesarias, brindan una visión parcial de como programar. 
+
+El trabajo práctico, en cambio, nos obligó a poner todos esos conocimientos  en juego en un mismo momento y lugar. Por ejemplo, ver como se relacionan las distintas clases, cuándo y porque conviene llamar a un método, cómo definir el comportamiento de un objeto dentro de su propia clase y solo dentro de esta, o cómo trabajar con un array de objetos entre otras cosas.
+
+Todas lo mencionado hizo que el trabajo ayudara a que tuviésemos una mejor comprensión de cómo funciona el lenguaje y de cómo pensar a la hora de programar, sin perder de vista cada uno de los módulos que conforman el código. Dicho de otro modo, todo esto llevó a que tengamos un conocimiento más amplio y un poco más profundo de cómo se programa.  
